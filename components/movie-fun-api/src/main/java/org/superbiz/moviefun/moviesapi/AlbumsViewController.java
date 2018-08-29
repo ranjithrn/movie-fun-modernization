@@ -1,9 +1,11 @@
-package org.superbiz.moviefun.albums;
+package org.superbiz.moviefun.moviesapi;
 
 import org.apache.tika.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,52 +15,34 @@ import org.superbiz.moviefun.blobstore.BlobStore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
-@RestController
+@Controller
 @RequestMapping("/albums")
-public class AlbumsController {
+public class AlbumsViewController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final AlbumsBean albumsBean;
+    private final AlbumsClient albumsClient;
     private final BlobStore blobStore;
 
-    public AlbumsController(AlbumsBean albumsBean, BlobStore blobStore) {
-        this.albumsBean = albumsBean;
+    public AlbumsViewController(AlbumsClient albumsClient, BlobStore blobStore) {
+        this.albumsClient = albumsClient;
         this.blobStore = blobStore;
     }
 
-    @PostMapping()
-    public void addAlbum(@RequestBody Album album){
-        albumsBean.addAlbum(album);
-    }
 
-    @GetMapping()
-    public List<Album> getAlbums(){
-        return albumsBean.getAlbums();
-
-    }
-
-
-    @GetMapping("/{id}")
-    public Album find(@PathVariable long id) {
-        return albumsBean.find(id);
-    }
-
-    /*@GetMapping
+    @GetMapping
     public String index(Map<String, Object> model) {
-        model.put("albums", albumsBean.getAlbums());
+        model.put("albums", albumsClient.getAlbums());
         return "albums";
     }
 
     @GetMapping("/{albumId}")
     public String details(@PathVariable long albumId, Map<String, Object> model) {
-        model.put("album", albumsBean.find(albumId));
+        model.put("album", albumsClient.find(albumId));
         return "albumDetails";
     }
 
@@ -112,5 +96,5 @@ public class AlbumsController {
 
     private String getCoverBlobName(@PathVariable long albumId) {
         return format("covers/%d", albumId);
-    }*/
+    }
 }
