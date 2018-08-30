@@ -4,14 +4,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.superbiz.moviefun.albumsapi.AlbumsClient;
 import org.superbiz.moviefun.moviesapi.MoviesClient;
 
 @Configuration
 public class ClientConfiguration {
 
-    @Value("${albums.url}") String albumsUrl;
-    @Value("${movies.url}") String moviesUrl;
+    @Value("//album-service/albums") String albumsUrl;
+    @Value("//movie-service/movies") String moviesUrl;
 
     @Bean
     public AlbumsClient albumsClient(RestOperations restOperations) {
